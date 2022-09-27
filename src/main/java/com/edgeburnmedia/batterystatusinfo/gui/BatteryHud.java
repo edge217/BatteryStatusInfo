@@ -10,6 +10,7 @@ import net.minecraft.util.Identifier;
 
 public class BatteryHud extends DrawableHelper {
 	private static final MinecraftClient client = MinecraftClient.getInstance();
+	private static final int SCALE = 21;
 	private final BatteryStatusInfoConfig config;
 
 	public BatteryHud(BatteryStatusInfoConfig config) {
@@ -36,22 +37,25 @@ public class BatteryHud extends DrawableHelper {
 		client.getTextureManager().bindTexture(texture);
 		RenderSystem.setShaderTexture(0, texture);
 
+		int textWidth = client.textRenderer.getWidth(text);
+		int textHeight = client.textRenderer.fontHeight;
+
 		switch (position) {
 			case TOP_LEFT -> {
+				DrawableHelper.drawTexture(matrices, 1, 0, SCALE, SCALE, 0f, 0f, config.getHudIconScale(), config.getHudIconScale(), 16, 16);
+				client.textRenderer.drawWithShadow(matrices, text, 23, 7, 0xFFFFFF);
 			}
 			case TOP_RIGHT -> {
+				DrawableHelper.drawTexture(matrices, windowWidth - SCALE - 1, 0, SCALE, SCALE, 0f, 0f, config.getHudIconScale(), config.getHudIconScale(), 16, 16);
+				client.textRenderer.drawWithShadow(matrices, text, windowWidth - textWidth - 23, 7, 0xFFFFFF);
 			}
 			case BOTTOM_LEFT -> {
+				DrawableHelper.drawTexture(matrices, 1, windowHeight - SCALE - 1, SCALE, SCALE, 0f, 0f, config.getHudIconScale(), config.getHudIconScale(), 16, 16);
+				client.textRenderer.drawWithShadow(matrices, text, 23, windowHeight - textHeight - 6, 0xFFFFFF);
 			}
 			case BOTTOM_RIGHT -> {
-				int y = windowHeight - 16;
-
-				int textWidth = client.textRenderer.getWidth(text);
-				int textHeight = client.textRenderer.fontHeight;
-				int textX = windowWidth - textWidth - 4;
-				DrawableHelper.drawTexture(matrices, textX - config.getHudIconScale() - 2, (int) (y - (textHeight / 4.0)), 0f, 0f, config.getHudIconScale(), config.getHudIconScale(), 16, 16);
-				client.textRenderer.drawWithShadow(matrices, text, textX, y + 2, 0xFFFFFF);
-
+				DrawableHelper.drawTexture(matrices, windowWidth - SCALE - 1, windowHeight - SCALE - 1, SCALE, SCALE, 0f, 0f, config.getHudIconScale(), config.getHudIconScale(), 16, 16);
+				client.textRenderer.drawWithShadow(matrices, text, windowWidth - textWidth - 23, windowHeight - textHeight - 6, 0xFFFFFF);
 			}
 		}
 
