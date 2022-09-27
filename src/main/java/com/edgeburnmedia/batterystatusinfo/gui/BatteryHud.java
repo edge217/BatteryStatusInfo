@@ -23,7 +23,9 @@ public class BatteryHud extends DrawableHelper {
 			return;
 		}
 
-		// TODO add check for config to not show when fully charged
+		if (!config.isShowHudWhenFullyCharged() && status.getCharge() == 1) {
+			return;
+		}
 
 		final int windowWidth = client.getWindow().getScaledWidth();
 		final int windowHeight = client.getWindow().getScaledHeight();
