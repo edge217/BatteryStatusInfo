@@ -44,14 +44,14 @@ public class BatteryCheckerThread extends Thread {
 		setName("Battery Checker Thread");
 		running = true;
 		long lastCheck = 0;
+		LOGGER.info("Starting battery checker thread");
 		while (running) {
 			long time = System.currentTimeMillis();
-			if (time - lastCheck >= BatteryStatusInfoModClient.getConfig().getCheckInterval()) { // FIXME get from constructor
+			if (time - lastCheck >= BatteryStatusInfoModClient.getConfig().getCheckInterval()) {
 				lastCheck = time;
 				batteryPercentage = BatteryUtils.getCharge();
 				charging = BatteryUtils.isCharging();
 				timeRemaining = BatteryUtils.getTimeRemaining();
-				LOGGER.info("Checked battery info: " + batteryPercentage + ", " + charging);
 			}
 		}
 		LOGGER.info("Battery checker thread stopped");

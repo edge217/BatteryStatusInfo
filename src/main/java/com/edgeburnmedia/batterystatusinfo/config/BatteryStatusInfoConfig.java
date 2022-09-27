@@ -9,6 +9,13 @@ import net.fabricmc.api.Environment;
 @Environment(EnvType.CLIENT)
 @Config(name = "batterystatusinfo")
 public class BatteryStatusInfoConfig implements ConfigData {
+	@ConfigEntry.Category("general")
+	@ConfigEntry.BoundedDiscrete(max = 99, min = 1)
+	int lowBatteryThreshold = 20;
+	@ConfigEntry.Category("general")
+	@ConfigEntry.Gui.Tooltip
+	long checkInterval = 5000;
+
 	@ConfigEntry.Category("alerts")
 	boolean showLowBatteryAlert = true;
 	@ConfigEntry.Category("alerts")
@@ -18,12 +25,19 @@ public class BatteryStatusInfoConfig implements ConfigData {
 	@ConfigEntry.Category("alerts")
 	@ConfigEntry.Gui.PrefixText
 	boolean showDischargingAlert = true;
-	@ConfigEntry.Category("general")
-	@ConfigEntry.BoundedDiscrete(max = 99, min = 1)
-	int lowBatteryThreshold = 20;
-	@ConfigEntry.Category("general")
-	@ConfigEntry.Gui.Tooltip
-	long checkInterval = 5000;
+
+	@ConfigEntry.Category("hud")
+	boolean showHud = true;
+	@ConfigEntry.Category("hud")
+	boolean showHudWhenFullyCharged = true;
+
+	public boolean isShowHud() {
+		return showHud;
+	}
+
+	public boolean isShowHudWhenFullyCharged() {
+		return showHudWhenFullyCharged;
+	}
 
 	public boolean isShowLowBatteryAlert() {
 		return showLowBatteryAlert;

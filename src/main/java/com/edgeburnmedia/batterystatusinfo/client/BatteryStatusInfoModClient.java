@@ -19,10 +19,22 @@ import net.minecraft.text.Text;
 public class BatteryStatusInfoModClient implements ClientModInitializer {
 	public static BatteryCheckerThread batteryCheckerThread;
 	private static BatteryStatusInfoConfig config;
+	private static boolean gameResourcesReady = false;
 	private BatteryMonitor batteryMonitor;
 
 	public static BatteryStatusInfoConfig getConfig() {
 		return config;
+	}
+
+	public static boolean isGameResourcesReady() {
+		return gameResourcesReady;
+	}
+
+	/**
+	 * Mark that the game resources are ready, so that text can be displayed
+	 */
+	public static void gameResourcesReady() {
+		gameResourcesReady = true;
 	}
 
 	@Override
