@@ -1,5 +1,8 @@
 package com.edgeburnmedia.batterystatusinfo;
 
+import com.edgeburnmedia.batterystatusinfo.utils.BatteryUtils;
+import net.minecraft.util.Identifier;
+
 /**
  * Class representing the status of the battery at a given point.
  *
@@ -29,5 +32,9 @@ public class BatteryStatus {
 
 	public double getTimeRemaining() {
 		return timeRemaining;
+	}
+
+	public Identifier getBatteryIcon() {
+		return BatteryUtils.getBatteryIcon(this);
 	}
 }

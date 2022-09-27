@@ -30,6 +30,19 @@ public class BatteryStatusInfoConfig implements ConfigData {
 	boolean showHud = true;
 	@ConfigEntry.Category("hud")
 	boolean showHudWhenFullyCharged = true;
+	@ConfigEntry.Category("hud")
+	@ConfigEntry.Gui.EnumHandler(option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON)
+	Position position = Position.BOTTOM_LEFT;
+//	@ConfigEntry.Category("hud")
+//	int hudIconScale = 16;
+
+	public int getHudIconScale() {
+		return 16;
+	}
+
+	public Position getPosition() {
+		return position;
+	}
 
 	public boolean isShowHud() {
 		return showHud;
@@ -61,6 +74,13 @@ public class BatteryStatusInfoConfig implements ConfigData {
 
 	public long getCheckInterval() {
 		return checkInterval;
+	}
+
+	public enum Position {
+		BOTTOM_LEFT,
+		BOTTOM_RIGHT,
+		TOP_LEFT,
+		TOP_RIGHT
 	}
 
 }

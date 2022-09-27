@@ -3,6 +3,7 @@ package com.edgeburnmedia.batterystatusinfo.client;
 import com.edgeburnmedia.batterystatusinfo.BatteryCheckerThread;
 import com.edgeburnmedia.batterystatusinfo.BatteryMonitor;
 import com.edgeburnmedia.batterystatusinfo.config.BatteryStatusInfoConfig;
+import com.edgeburnmedia.batterystatusinfo.gui.BatteryHud;
 import com.edgeburnmedia.batterystatusinfo.utils.BatteryUtils;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.BoolArgumentType;
@@ -17,6 +18,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.text.Text;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
@@ -27,6 +29,7 @@ public class BatteryStatusInfoModClient implements ClientModInitializer {
 	private static BatteryStatusInfoConfig config;
 	private static boolean gameResourcesReady = false;
 	private BatteryMonitor batteryMonitor;
+	private BatteryHud batteryHud;
 
 	public static BatteryStatusInfoConfig getConfig() {
 		return config;
@@ -50,6 +53,11 @@ public class BatteryStatusInfoModClient implements ClientModInitializer {
 		batteryCheckerThread = new BatteryCheckerThread();
 		batteryCheckerThread.start();
 		batteryMonitor = new BatteryMonitor();
+		batteryHud = new BatteryHud(getConfig());
+
+		HudRenderCallback.EVENT.register((matrixStack, tickDelta) -> {
+			batteryHud.render(batteryCheckerThread.getBatteryStatus(), matrixStack);
+		});
 
 		// Register debug command
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {

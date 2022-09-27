@@ -12,5 +12,7 @@
   "text.autoconfig.batterystatusinfo.option.showDischargingAlert.@PrefixText": "NOTICE: On some systems, this option may display alerts after reaching 100% charge.",
   "text.autoconfig.batterystatusinfo.option.lowBatteryThreshold": "Low Battery Threshold",
   "text.autoconfig.batterystatusinfo.option.checkInterval": "Check Interval",
+  "text.autoconfig.batterystatusinfo.option.position": "Position on Screen",
+  "text.autoconfig.batterystatusinfo.option.hudIconScale": "HUD Icon Scale",
   "text.autoconfig.batterystatusinfo.option.checkInterval.@Tooltip": "How often to check the battery status, in milliseconds"
 }
