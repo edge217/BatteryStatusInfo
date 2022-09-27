@@ -61,7 +61,7 @@ public class BatteryStatusInfoModClient implements ClientModInitializer {
 
 		// Register debug command
 		ClientCommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
-			dispatcher.register(ClientCommandManager.literal("lbadebug").executes(context -> {
+			dispatcher.register(ClientCommandManager.literal("bsidebug").executes(context -> {
 				context.getSource().sendFeedback(Text.of(BatteryUtils.getDebugInfo()));
 				return 0;
 			}));
