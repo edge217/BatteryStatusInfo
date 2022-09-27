@@ -1,0 +1,13 @@
+{
+  "text.autoconfig.lowbatteryalert.title": "Low Battery Alert",
+  "text.autoconfig.lowbatteryalert.category.alerts": "Alerts",
+  "text.autoconfig.lowbatteryalert.category.general": "General",
+  "text.autoconfig.lowbatteryalert.option.showLowBatteryAlert": "Show Low Battery Alert",
+  "text.autoconfig.lowbatteryalert.option.showFullyChargedAlert": "Show Fully Charged Alert",
+  "text.autoconfig.lowbatteryalert.option.showChargingAlert": "Show Charging Alert",
+  "text.autoconfig.lowbatteryalert.option.showDischargingAlert": "Show Discharging Alert",
+  "text.autoconfig.lowbatteryalert.option.showDischargingAlert.@PrefixText": "NOTICE: On some systems, this option may display alerts after reaching 100% charge.",
+  "text.autoconfig.lowbatteryalert.option.lowBatteryThreshold": "Low Battery Threshold",
+  "text.autoconfig.lowbatteryalert.option.checkInterval": "Check Interval",
+  "text.autoconfig.lowbatteryalert.option.checkInterval.@Tooltip": "How often to check the battery status, in milliseconds"
+}

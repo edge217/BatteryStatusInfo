@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "batterystatusinfo",
+  "version": "${version}",
+  "name": "Battery Status Info",
+  "description": "Show in-game alerts about your battery status",
+  "authors": [
+    "Edgeburn Media",
+    "Sam R"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/batterystatusinfo/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.edgeburnmedia.batterystatusinfo.client.BatteryStatusInfoModClient"
+    ],
+    "main": [
+      "com.edgeburnmedia.batterystatusinfo.BatteryStatusInfoMod"
+    ],
+    "modmenu": [
+      "com.edgeburnmedia.batterystatusinfo.config.BatteryStatusInfoModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "batterystatusinfo.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.9",
+    "fabric": "*",
+    "minecraft": "~1.19"
+  }
+}
