@@ -15,10 +15,8 @@ public class BatteryMonitor {
 	private boolean fullyChargedAlerted = false;
 	private boolean chargingAlerted = false;
 	private boolean dischargingAlerted = true;
-	private double lowBatteryThreshold;
 
 	public BatteryMonitor() {
-		lowBatteryThreshold = (double) BatteryStatusInfoModClient.getConfig().getLowBatteryThreshold() / 100.0; // FIXME make it so that when the config changes, the threshold is updated
 		config = BatteryStatusInfoModClient.getConfig();
 	}
 
@@ -35,7 +33,7 @@ public class BatteryMonitor {
 			return;
 		}
 
-		if (status.getCharge() <= lowBatteryThreshold && config.isShowLowBatteryAlert()) {
+		if (status.getCharge() <= getLowBatteryThreshold() && config.isShowLowBatteryAlert()) {
 			if (!lowBatteryAlerted) {
 				new BasicToastBuilder().title("Low Battery").description("Battery is at " + BatteryUtils.getChargePercent(status.getCharge()) + "%").icon(Icons.BATTERY_0).build().show();
 				lowBatteryAlerted = true;
@@ -74,10 +72,7 @@ public class BatteryMonitor {
 	}
 
 	public double getLowBatteryThreshold() {
-		return lowBatteryThreshold;
+		return (double) config.getLowBatteryThreshold() / 100.0;
 	}
 
-	public void setLowBatteryThreshold(double lowBatteryThreshold) {
-		this.lowBatteryThreshold = lowBatteryThreshold;
-	}
 }

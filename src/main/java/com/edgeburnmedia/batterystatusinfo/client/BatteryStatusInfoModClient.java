@@ -4,6 +4,10 @@ import com.edgeburnmedia.batterystatusinfo.BatteryCheckerThread;
 import com.edgeburnmedia.batterystatusinfo.BatteryMonitor;
 import com.edgeburnmedia.batterystatusinfo.config.BatteryStatusInfoConfig;
 import com.edgeburnmedia.batterystatusinfo.utils.BatteryUtils;
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import dev.cbyrne.toasts.impl.builder.BasicToastBuilder;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
@@ -14,6 +18,8 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.text.Text;
+
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 
 @Environment(EnvType.CLIENT)
 public class BatteryStatusInfoModClient implements ClientModInitializer {
@@ -53,6 +59,19 @@ public class BatteryStatusInfoModClient implements ClientModInitializer {
 			}));
 		});
 
+		ClientCommandRegistrationCallback.EVENT.register(((dispatcher, registryAccess) -> {
+			dispatcher.register(ClientCommandManager.literal("bsi_icons_debug")
+					.then(argument("charge", DoubleArgumentType.doubleArg(0.0, 1.0))
+							.then(argument("charging", BoolArgumentType.bool())
+									.executes(context -> {
+										double charge = DoubleArgumentType.getDouble(context, "charge");
+										boolean charging = BoolArgumentType.getBool(context, "charging");
+										showDebugToast(charge, charging);
+										return Command.SINGLE_SUCCESS;
+									}))));
+
+
+		}));
 		ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
 			batteryCheckerThread.halt();
 		});
@@ -60,7 +79,10 @@ public class BatteryStatusInfoModClient implements ClientModInitializer {
 		ClientTickEvents.START_CLIENT_TICK.register(client -> {
 			batteryMonitor.check(batteryCheckerThread.getBatteryStatus());
 		});
-
-
 	}
+
+	private void showDebugToast(double charge, boolean charging) {
+		new BasicToastBuilder().title("Debug").description(Math.round(charge * 100) + "%, " + charging).icon(BatteryUtils.getBatteryIcon(charge, charging)).build().show();
+	}
+
 }
