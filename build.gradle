@@ -11,7 +11,7 @@ repositories {
     maven { url "https://maven.terraformersmc.com/releases/" }
     maven { url "https://maven.parchmentmc.org" }
     maven { url "https://maven.shedaniel.me/" }
-    mavenLocal()
+    maven { url "https://nexus.edgeburnmedia.com/repository/edgeburnmediamaven/" }
 
 
     // Add repositories to retrieve artifacts from in here.
@@ -101,5 +101,14 @@ publishing {
         // Notice: This block does NOT have the same function as the block in the top level.
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
+        maven {
+            name = "edgeburnmediamaven"
+            url = "https://nexus.edgeburnmedia.com/repository/edgeburnmediamaven/"
+            credentials {
+                username = "admin"
+                password = System.getenv("EDGEBURNMEDIA_MAVEN_PASSWORD")
+            }
+        }
+        mavenLocal()
     }
 }
