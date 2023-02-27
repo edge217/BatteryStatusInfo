@@ -34,7 +34,7 @@ dependencies {
     modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
 
     implementation 'com.github.oshi:oshi-core:6.4.0'
-    include('com.github.oshi:oshi-core:6.3.2')
+    include('com.github.oshi:oshi-core:6.4.0')
 
     modImplementation("dev.cbyrne:Toasts:0.2.0") {
         exclude(group: "net.fabricmc.fabric-api")
