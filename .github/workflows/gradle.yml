@@ -13,9 +13,6 @@ on:
   pull_request:
     branches: [ "master" ]
 
-permissions:
-  contents: read
-
 jobs:
   build:
 
@@ -41,3 +38,7 @@ jobs:
         path: build/libs/**.jar
         # The desired behavior if no files are found using the provided path.
         if-no-files-found: error
+    - name: Gradle Dependency Submission
+      if: github.ref == 'refs/heads/master'
+      continue-on-error: true
+      uses: mikepenz/gradle-dependency-submission@v0.8.4
