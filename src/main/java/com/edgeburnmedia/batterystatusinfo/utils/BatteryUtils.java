@@ -3,18 +3,12 @@ package com.edgeburnmedia.batterystatusinfo.utils;
 import com.edgeburnmedia.batterystatusinfo.BatteryStatus;
 import com.edgeburnmedia.batterystatusinfo.client.BatteryStatusInfoModClient;
 import net.minecraft.util.Identifier;
-import oshi.SystemInfo;
 import oshi.hardware.PowerSource;
 
 /**
  * Utility class for getting battery information.
  */
 public final class BatteryUtils {
-	/**
-	 * Instance of the OSHI SystemInfo class.
-	 */
-	private static final SystemInfo SYSTEM_INFO = new SystemInfo();
-
 	private BatteryUtils() {
 		throw new IllegalStateException("Utility class");
 	}
@@ -22,30 +16,33 @@ public final class BatteryUtils {
 	/**
 	 * Get the battery percentage as a double between 0 and 1
 	 *
+	 * @param powerSource the power source to get the charge from
 	 * @return the battery percentage as a double between 0 and 1
 	 */
-	public static double getCharge() {
-		return SYSTEM_INFO.getHardware().getPowerSources().get(0).getRemainingCapacityPercent();
+	public static double getCharge(PowerSource powerSource) {
+		return powerSource.getRemainingCapacityPercent();
 	}
 
 	/**
 	 * Get whether the device is charging
 	 *
+	 * @param powerSource the power source to check whether is charging
 	 * @return whether the device is charging
 	 * @see PowerSource#isCharging()
 	 */
-	public static boolean isCharging() {
-		return SYSTEM_INFO.getHardware().getPowerSources().get(0).isCharging();
+	public static boolean isCharging(PowerSource powerSource) {
+		return powerSource.isCharging();
 	}
 
 	/**
 	 * Get the estimated time remaining on the battery in seconds
 	 *
+	 * @param powerSource the power source to get the time remaining from
 	 * @return the estimated time remaining on the battery in seconds
 	 * @see PowerSource#getTimeRemainingEstimated()
 	 */
-	public static double getTimeRemaining() {
-		return SYSTEM_INFO.getHardware().getPowerSources().get(0).getTimeRemainingEstimated();
+	public static double getTimeRemaining(PowerSource powerSource) {
+		return powerSource.getTimeRemainingEstimated();
 	}
 
 	/**
@@ -90,6 +87,10 @@ public final class BatteryUtils {
 				return Icons.BATTERY_UNKNOWN;
 			}
 		}
+	}
+
+	public static String getPowerSourceDescription(PowerSource powerSource) {
+		return powerSource.getManufacturer() + " " + powerSource.getName() + " (" + powerSource.getSerialNumber() + ")" + " (" + powerSource.getMaxCapacity() + ")";
 	}
 
 	public static int getChargePercent(double charge) {
