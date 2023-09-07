@@ -2,9 +2,7 @@ package com.edgeburnmedia.batterystatusinfo;
 
 import com.edgeburnmedia.batterystatusinfo.client.BatteryStatusInfoModClient;
 import com.edgeburnmedia.batterystatusinfo.config.BatteryStatusInfoConfig;
-import com.edgeburnmedia.batterystatusinfo.utils.BatteryUtils;
-import com.edgeburnmedia.batterystatusinfo.utils.Icons;
-import dev.cbyrne.toasts.impl.builder.BasicToastBuilder;
+import com.edgeburnmedia.batterystatusinfo.toast.BatteryAlertToast;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +33,7 @@ public class BatteryMonitor {
 
 		if (status.getCharge() <= getLowBatteryThreshold() && config.isShowLowBatteryAlert()) {
 			if (!lowBatteryAlerted) {
-				new BasicToastBuilder().title("Low Battery").description("Battery is at " + BatteryUtils.getChargePercent(status.getCharge()) + "%").icon(Icons.BATTERY_0).build().show();
+				new BatteryAlertToast(status, getLowBatteryThreshold()).show();
 				lowBatteryAlerted = true;
 			}
 		} else {
@@ -44,7 +42,7 @@ public class BatteryMonitor {
 
 		if (status.getCharge() >= 1 && config.isShowFullyChargedAlert()) {
 			if (!fullyChargedAlerted) {
-				new BasicToastBuilder().title("Fully Charged").description("Battery is at 100%").icon(Icons.BATTERY_FULL).build().show();
+				new BatteryAlertToast(status, getLowBatteryThreshold()).show();
 				fullyChargedAlerted = true;
 			}
 		} else {
@@ -53,7 +51,7 @@ public class BatteryMonitor {
 
 		if (status.isCharging() && config.isShowChargingAlert()) {
 			if (!chargingAlerted) {
-				new BasicToastBuilder().title("Battery Charging").description("Battery is at " + BatteryUtils.getChargePercent(status.getCharge()) + "%").icon(BatteryUtils.getBatteryIcon(status.getCharge(), true)).build().show();
+				new BatteryAlertToast(status, getLowBatteryThreshold()).show();
 				chargingAlerted = true;
 				dischargingAlerted = false;
 			}
@@ -63,7 +61,7 @@ public class BatteryMonitor {
 
 		if (!status.isCharging() && config.isShowDischargingAlert()) {
 			if (!dischargingAlerted) {
-				new BasicToastBuilder().title("Charging Stopped").description("Battery is at " + BatteryUtils.getChargePercent(status.getCharge()) + "%").icon(BatteryUtils.getBatteryIcon(status.getCharge(), false)).build().show();
+				new BatteryAlertToast(status, getLowBatteryThreshold()).show();
 				dischargingAlerted = true;
 			}
 		} else {

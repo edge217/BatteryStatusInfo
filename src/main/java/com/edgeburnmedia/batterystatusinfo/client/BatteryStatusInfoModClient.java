@@ -2,13 +2,14 @@ package com.edgeburnmedia.batterystatusinfo.client;
 
 import com.edgeburnmedia.batterystatusinfo.BatteryCheckerThread;
 import com.edgeburnmedia.batterystatusinfo.BatteryMonitor;
+import com.edgeburnmedia.batterystatusinfo.BatteryStatus;
 import com.edgeburnmedia.batterystatusinfo.config.BatteryStatusInfoConfig;
 import com.edgeburnmedia.batterystatusinfo.gui.BatteryHud;
+import com.edgeburnmedia.batterystatusinfo.toast.BatteryAlertToast;
 import com.edgeburnmedia.batterystatusinfo.utils.BatteryUtils;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
-import dev.cbyrne.toasts.impl.builder.BasicToastBuilder;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
@@ -29,6 +30,11 @@ public class BatteryStatusInfoModClient implements ClientModInitializer {
 	private static BatteryStatusInfoConfig config;
 	private static boolean gameResourcesReady = false;
 	private BatteryMonitor batteryMonitor;
+
+	public BatteryMonitor getBatteryMonitor() {
+		return batteryMonitor;
+	}
+
 	private BatteryHud batteryHud;
 
 	public static BatteryStatusInfoConfig getConfig() {
@@ -55,8 +61,8 @@ public class BatteryStatusInfoModClient implements ClientModInitializer {
 		batteryMonitor = new BatteryMonitor();
 		batteryHud = new BatteryHud(getConfig());
 
-		HudRenderCallback.EVENT.register((matrixStack, tickDelta) -> {
-			batteryHud.render(batteryCheckerThread.getBatteryStatus(), matrixStack);
+		HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
+			batteryHud.render(batteryCheckerThread.getBatteryStatus(), drawContext);
 		});
 
 		// Register debug command
@@ -74,7 +80,8 @@ public class BatteryStatusInfoModClient implements ClientModInitializer {
 									.executes(context -> {
 										double charge = DoubleArgumentType.getDouble(context, "charge");
 										boolean charging = BoolArgumentType.getBool(context, "charging");
-										showDebugToast(charge, charging);
+										BatteryStatus status = new BatteryStatus(charge, charging, 0);
+										showDebugToast(status);
 										return Command.SINGLE_SUCCESS;
 									}))));
 
@@ -89,8 +96,8 @@ public class BatteryStatusInfoModClient implements ClientModInitializer {
 		});
 	}
 
-	private void showDebugToast(double charge, boolean charging) {
-		new BasicToastBuilder().title("Debug").description(Math.round(charge * 100) + "%, " + charging).icon(BatteryUtils.getBatteryIcon(charge, charging)).build().show();
+	private void showDebugToast(BatteryStatus status) {
+        new BatteryAlertToast(status, (double) getConfig().getLowBatteryThreshold() / 100.0).show();
 	}
 
 }

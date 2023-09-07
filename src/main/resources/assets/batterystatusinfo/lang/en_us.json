@@ -14,5 +14,10 @@
   "text.autoconfig.batterystatusinfo.option.checkInterval": "Check Interval",
   "text.autoconfig.batterystatusinfo.option.position": "Position on Screen",
   "text.autoconfig.batterystatusinfo.option.hudIconScale": "HUD Icon Scale",
-  "text.autoconfig.batterystatusinfo.option.checkInterval.@Tooltip": "How often to check the battery status, in milliseconds"
+  "text.autoconfig.batterystatusinfo.option.checkInterval.@Tooltip": "How often to check the battery status, in milliseconds",
+  "toast.batterystatusinfo.lowbattery": "Low Battery",
+  "toast.batterystatusinfo.charging": "Battery Charging",
+  "toast.batterystatusinfo.discharging": "Charging Stopped",
+  "toast.batterystatusinfo.generic": "Battery Alert",
+  "toast.batterystatusinfo.status": "Battery is at %d%%"
 }

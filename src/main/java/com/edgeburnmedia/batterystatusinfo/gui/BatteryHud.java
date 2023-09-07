@@ -2,23 +2,21 @@ package com.edgeburnmedia.batterystatusinfo.gui;
 
 import com.edgeburnmedia.batterystatusinfo.BatteryStatus;
 import com.edgeburnmedia.batterystatusinfo.config.BatteryStatusInfoConfig;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
 
-public class BatteryHud extends DrawableHelper {
+public class BatteryHud {
 	private static final MinecraftClient client = MinecraftClient.getInstance();
 	private static final int SCALE = 21;
+	private static final int PERCENT_COLOUR = 0xFFFFFF;
 	private final BatteryStatusInfoConfig config;
 
 	public BatteryHud(BatteryStatusInfoConfig config) {
 		this.config = config;
 	}
 
-
-	public void render(BatteryStatus status, MatrixStack matrices) {
+	public void render(BatteryStatus status, DrawContext drawContext) {
 		if (!config.isShowHud()) {
 			return;
 		}
@@ -35,29 +33,26 @@ public class BatteryHud extends DrawableHelper {
 		BatteryStatusInfoConfig.Position position = config.getPosition();
 
 		final Identifier texture = status.getBatteryIcon();
-		matrices.push();
-		client.getTextureManager().bindTexture(texture);
-		RenderSystem.setShaderTexture(0, texture);
 
 		int textWidth = client.textRenderer.getWidth(text);
 		int textHeight = client.textRenderer.fontHeight;
 
-		switch (position) {
+        switch (position) {
 			case TOP_LEFT -> {
-				DrawableHelper.drawTexture(matrices, 1, 0, SCALE, SCALE, 0f, 0f, config.getHudIconScale(), config.getHudIconScale(), 16, 16);
-				client.textRenderer.drawWithShadow(matrices, text, 23, 7, 0xFFFFFF);
+				drawContext.drawTexture(texture, 1, 0, 0, 0, SCALE, SCALE, SCALE, SCALE);
+				drawContext.drawTextWithShadow(client.textRenderer, text, 23, 7, PERCENT_COLOUR);
 			}
 			case TOP_RIGHT -> {
-				DrawableHelper.drawTexture(matrices, windowWidth - SCALE - 1, 0, SCALE, SCALE, 0f, 0f, config.getHudIconScale(), config.getHudIconScale(), 16, 16);
-				client.textRenderer.drawWithShadow(matrices, text, windowWidth - textWidth - 23, 7, 0xFFFFFF);
+				drawContext.drawTexture(texture, windowWidth - SCALE - 1, 0, 0, 0, SCALE, SCALE, SCALE, SCALE);
+				drawContext.drawTextWithShadow(client.textRenderer, text, windowWidth - textWidth - 23, 7, PERCENT_COLOUR);
 			}
 			case BOTTOM_LEFT -> {
-				DrawableHelper.drawTexture(matrices, 1, windowHeight - SCALE - 1, SCALE, SCALE, 0f, 0f, config.getHudIconScale(), config.getHudIconScale(), 16, 16);
-				client.textRenderer.drawWithShadow(matrices, text, 23, windowHeight - textHeight - 6, 0xFFFFFF);
+				drawContext.drawTexture(texture, 1, windowHeight - SCALE - 1, 0, 0, SCALE, SCALE, SCALE, SCALE);
+				drawContext.drawTextWithShadow(client.textRenderer, text, 23, windowHeight - textHeight - 6, PERCENT_COLOUR);
 			}
 			case BOTTOM_RIGHT -> {
-				DrawableHelper.drawTexture(matrices, windowWidth - SCALE - 1, windowHeight - SCALE - 1, SCALE, SCALE, 0f, 0f, config.getHudIconScale(), config.getHudIconScale(), 16, 16);
-				client.textRenderer.drawWithShadow(matrices, text, windowWidth - textWidth - 23, windowHeight - textHeight - 6, 0xFFFFFF);
+				drawContext.drawTexture(texture, windowWidth - SCALE - 1, windowHeight - SCALE - 1, 0, 0, SCALE, SCALE, SCALE, SCALE);
+				drawContext.drawTextWithShadow(client.textRenderer, text, windowWidth - textWidth - 23, windowHeight - textHeight - 6, PERCENT_COLOUR);
 			}
 		}
 
