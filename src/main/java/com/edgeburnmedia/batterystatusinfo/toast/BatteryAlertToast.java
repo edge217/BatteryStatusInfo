@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2023 Edgeburn Media. All rights reserved.
+ */
+
 package com.edgeburnmedia.batterystatusinfo.toast;
 
 import com.edgeburnmedia.batterystatusinfo.BatteryStatus;
@@ -41,7 +45,7 @@ public class BatteryAlertToast implements Toast {
     }
 
     protected Text getTitle() {
-        if (!status.isCharging() && status.getCharge() < lowBatteryThreshold) {
+        if (!status.isCharging() && status.getCharge() <= lowBatteryThreshold) {
             return Text.translatableWithFallback("toast.lowbatterystatus.lowbattery", "Low Battery").formatted(Formatting.RED, Formatting.BOLD);
         } else if (status.isCharging()) {
             return Text.translatableWithFallback("toast.batterystatusinfo.charging", "Battery Charging");
