@@ -14,6 +14,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 public class BatteryAlertToast implements Toast {
+    private static final Identifier BACKGROUND_TEXTURE = new Identifier("minecraft", "textures/gui/toasts.png");
     private static final double DISPLAY_TIME = 3000;
     private static final int WHITE_COLOUR = 0xFFFFFF;
     private static final int GRAY_COLOUR = 0xAAAAAA;
@@ -29,7 +30,7 @@ public class BatteryAlertToast implements Toast {
     }
     @Override
     public Visibility draw(DrawContext context, ToastManager manager, long startTime) {
-        context.drawTexture(TEXTURE, 0,0,0,0,160, 32);
+        context.drawTexture(BACKGROUND_TEXTURE, 0,0,0,0,160, 32);
 
         context.drawTexture(iconTexture, 4,5,0,0, 21,21, 21, 21);
         // 4 + 21 + 2 = x of icon texture + width of icon texture + buffer space
