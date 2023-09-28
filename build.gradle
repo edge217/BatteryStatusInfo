@@ -36,7 +36,7 @@ dependencies {
     implementation 'com.github.oshi:oshi-core:6.4.6'
     include('com.github.oshi:oshi-core:6.4.6')
 
-    modApi("me.shedaniel.cloth:cloth-config-fabric:12.0.108") {
+    modApi("me.shedaniel.cloth:cloth-config-fabric:12.0.109") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
