@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Edgeburn Media. All rights reserved.
+ * Copyright (c) 2023-2024 Edgeburn Media. All rights reserved.
  */
 
 package com.edgeburnmedia.batterystatusinfo.toast;
@@ -14,7 +14,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 public class BatteryAlertToast implements Toast {
-    private static final Identifier BACKGROUND_TEXTURE = new Identifier("minecraft", "toast/advancement");
+    private static final Identifier BACKGROUND_TEXTURE = Identifier.of("minecraft", "toast/advancement");
     private static final double DISPLAY_TIME = 3000;
     private static final int WHITE_COLOUR = 0xFFFFFF;
     private static final int GRAY_COLOUR = 0xAAAAAA;
