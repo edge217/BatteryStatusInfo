@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.0-SNAPSHOT'
+    id 'fabric-loom' version '1.6-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -11,7 +11,6 @@ repositories {
     maven { url "https://maven.terraformersmc.com/releases/" }
     maven { url "https://maven.parchmentmc.org" }
     maven { url "https://maven.shedaniel.me/" }
-    maven { url "https://nexus.edgeburnmedia.com/repository/edgeburnmediamaven/" }
 
 
     // Add repositories to retrieve artifacts from in here.
@@ -36,7 +35,7 @@ dependencies {
     implementation 'com.github.oshi:oshi-core:6.4.6'
     include('com.github.oshi:oshi-core:6.4.6')
 
-    modApi("me.shedaniel.cloth:cloth-config-fabric:12.0.109") {
+    modApi("me.shedaniel.cloth:cloth-config-fabric:15.0.127") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
@@ -51,7 +50,7 @@ processResources {
     }
 }
 
-def targetJavaVersion = 17
+def targetJavaVersion = 21
 tasks.withType(JavaCompile).configureEach {
     // ensure that the encoding is set to UTF-8, no matter what the system default is
     // this fixes some edge cases with special characters not displaying correctly
@@ -80,6 +79,10 @@ jar {
         rename { "${it}_${project.archivesBaseName}" }
     }
 }
+
+/*
+ * Copyright (c) 2024 Edgeburn Media. All rights reserved.
+ */
 
 // configure the maven publication
 publishing {
