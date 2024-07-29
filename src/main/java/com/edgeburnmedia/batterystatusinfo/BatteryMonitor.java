@@ -40,7 +40,7 @@ public class BatteryMonitor {
 			lowBatteryAlerted = false;
 		}
 
-		if (status.getCharge() >= 1 && config.isShowFullyChargedAlert()) {
+		if (status.isFullyCharged() && config.isShowFullyChargedAlert()) {
 			if (!fullyChargedAlerted) {
 				new BatteryAlertToast(status, getLowBatteryThreshold()).show();
 				fullyChargedAlerted = true;

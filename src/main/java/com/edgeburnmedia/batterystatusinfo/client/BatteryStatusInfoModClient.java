@@ -11,6 +11,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -21,6 +22,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 
@@ -54,8 +56,12 @@ public class BatteryStatusInfoModClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		AutoConfig.register(BatteryStatusInfoConfig.class, GsonConfigSerializer::new);
-		config = AutoConfig.getConfigHolder(BatteryStatusInfoConfig.class).getConfig();
+		var configHolder = AutoConfig.register(BatteryStatusInfoConfig.class, GsonConfigSerializer::new);
+		configHolder.registerSaveListener((configHolder2, config) -> {
+			batteryCheckerThread.notifyConfigurationChanges();
+			return ActionResult.PASS;
+		});
+		config = configHolder.getConfig();
 		batteryCheckerThread = new BatteryCheckerThread();
 		batteryCheckerThread.start();
 		batteryMonitor = new BatteryMonitor();
