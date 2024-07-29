@@ -47,13 +47,11 @@ public class BatteryAlertToast implements Toast {
 
     protected Text getTitle() {
         if (!status.isCharging() && status.getCharge() <= lowBatteryThreshold) {
-            return Text.translatableWithFallback("toast.lowbatterystatus.lowbattery", "Low Battery").formatted(Formatting.RED, Formatting.BOLD);
+            return Text.translatableWithFallback("toast.batterystatusinfo.lowbattery", "Low Battery").formatted(Formatting.RED, Formatting.BOLD);
         } else if (status.isCharging()) {
             return Text.translatableWithFallback("toast.batterystatusinfo.charging", "Battery Charging");
-        } else if (!status.isCharging()) {
-            return Text.translatableWithFallback("toast.batterystatusinfo.discharging", "Charging Stopped");
         } else {
-            return Text.translatableWithFallback("toast.batterystatusinfo.generic", "Battery Alert");
+            return Text.translatableWithFallback("toast.batterystatusinfo.discharging", "Charging Stopped");
         }
     }
 
