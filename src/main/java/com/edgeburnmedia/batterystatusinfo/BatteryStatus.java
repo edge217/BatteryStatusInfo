@@ -15,15 +15,16 @@ public class BatteryStatus {
 
 	public BatteryStatus(double charge, boolean isCharging, double timeRemaining) {
 		this.timeRemaining = timeRemaining;
-		if (charge < 0 || charge > 1) {
-			throw new IllegalArgumentException("Battery percentage must be between 0 and 1");
-		}
 		this.charge = charge;
 		this.isCharging = isCharging;
 	}
 
 	public double getCharge() {
 		return charge;
+	}
+
+	public boolean isFullyCharged() {
+		return getCharge() >= 1.0d;
 	}
 
 	public boolean isCharging() {

@@ -2,6 +2,7 @@ package com.edgeburnmedia.batterystatusinfo.gui;
 
 import com.edgeburnmedia.batterystatusinfo.BatteryStatus;
 import com.edgeburnmedia.batterystatusinfo.config.BatteryStatusInfoConfig;
+import com.edgeburnmedia.batterystatusinfo.utils.BatteryUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.Identifier;
@@ -21,14 +22,14 @@ public class BatteryHud {
 			return;
 		}
 
-		if (!config.isShowHudWhenFullyCharged() && status.getCharge() == 1) {
+		if (!config.isShowHudWhenFullyCharged() && status.isFullyCharged()) {
 			return;
 		}
 
 		final int windowWidth = client.getWindow().getScaledWidth();
 		final int windowHeight = client.getWindow().getScaledHeight();
 
-		String text = Math.round(status.getCharge() * 100) + "%";
+		String text = BatteryUtils.getChargePercent(status.getCharge()) + "%";
 
 		BatteryStatusInfoConfig.Position position = config.getPosition();
 
