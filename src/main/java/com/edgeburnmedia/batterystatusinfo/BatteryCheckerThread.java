@@ -10,51 +10,60 @@ import org.slf4j.LoggerFactory;
  *
  * @author Edgeburn Media
  */
-public class BatteryCheckerThread extends Thread {
+public class BatteryCheckerThread {
 	private static final Logger LOGGER = LoggerFactory.getLogger(BatteryCheckerThread.class);
-	private boolean running;
+	private final Thread thread = new Thread(this::run);
+	private volatile boolean running;
+	private long lastCheck;
 	private double batteryPercentage;
 	private boolean charging;
 	private double timeRemaining;
 
-	/**
-	 * Get the battery percentage as a double between 0 and 1
-	 *
-	 * @return the battery percentage
-	 */
-	public double getBatteryPercentage() {
-		return batteryPercentage;
-	}
-
-	/**
-	 * Get whether the device is charging
-	 *
-	 * @return whether the device is charging
-	 */
-	public boolean isCharging() {
-		return charging;
+	{
+		thread.setName("Battery Checker Thread");
+		thread.setDaemon(true);
 	}
 
 	public BatteryStatus getBatteryStatus() {
 		return new BatteryStatus(batteryPercentage, charging, timeRemaining);
 	}
 
-	@Override
 	public void run() {
-		setName("Battery Checker Thread");
 		running = true;
-		long lastCheck = 0;
 		LOGGER.info("Starting battery checker thread");
+
+		performBatteryCheck();
+
 		while (running) {
 			long time = System.currentTimeMillis();
-			if (time - lastCheck >= BatteryStatusInfoModClient.getConfig().getCheckInterval()) {
-				lastCheck = time;
-				batteryPercentage = BatteryUtils.getCharge();
-				charging = BatteryUtils.isCharging();
-				timeRemaining = BatteryUtils.getTimeRemaining();
+			long timeToWait = lastCheck + BatteryStatusInfoModClient.getConfig().getCheckInterval() - time;
+			try {
+				if (timeToWait > 0) {
+					//noinspection BusyWait // Not a busy wait, it is polling hardware value changes
+					Thread.sleep(timeToWait);
+				}
+			} catch (InterruptedException e) {
+				// this just needs to restart the loop for us
+				continue;
 			}
+
+			performBatteryCheck();
 		}
 		LOGGER.info("Battery checker thread stopped");
+	}
+
+	private void performBatteryCheck() {
+		lastCheck = System.currentTimeMillis();
+		batteryPercentage = BatteryUtils.getCharge();
+		charging = BatteryUtils.isCharging();
+		timeRemaining = BatteryUtils.getTimeRemaining();
+	}
+
+	/**
+	 * Start the thread
+	 */
+	public void start() {
+		thread.start();
 	}
 
 	/**
@@ -62,5 +71,13 @@ public class BatteryCheckerThread extends Thread {
 	 */
 	public void halt() {
 		running = false;
+		thread.interrupt();
+	}
+
+	/**
+	 * Notify of configuration changes
+	 */
+	public void notifyConfigurationChanges() {
+		thread.interrupt();
 	}
 }
