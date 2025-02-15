@@ -6,7 +6,9 @@ package com.edgeburnmedia.batterystatusinfo.toast;
 
 import com.edgeburnmedia.batterystatusinfo.BatteryStatus;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.toast.Toast;
 import net.minecraft.client.toast.ToastManager;
 import net.minecraft.text.Text;
@@ -22,23 +24,39 @@ public class BatteryAlertToast implements Toast {
     private final BatteryStatus status;
     private double lowBatteryThreshold;
     private long startTime;
+    private boolean justUpdated = true;
+    private Visibility visibility = Visibility.HIDE;
 
     public BatteryAlertToast(BatteryStatus status, double lowBatteryThreshold) {
         this.iconTexture = status.getBatteryIcon();
         this.status = status;
         this.lowBatteryThreshold = lowBatteryThreshold;
     }
-    @Override
-    public Visibility draw(DrawContext context, ToastManager manager, long startTime) {
-        context.drawGuiTexture(BACKGROUND_TEXTURE, 0, 1, 160, 32);
 
-        context.drawTexture(iconTexture, 4,5,0,0, 21,21, 21, 21);
+    @Override
+    public void update(ToastManager manager, long time) {
+        if (this.justUpdated) {
+            this.startTime = time;
+            this.justUpdated = false;
+        }
+
+        this.visibility = time - this.startTime < DISPLAY_TIME ? Visibility.SHOW : Visibility.HIDE;
+    }
+
+    @Override
+    public void draw(DrawContext context, TextRenderer textRenderer, long startTime) {
+        context.drawGuiTexture(RenderLayer::getGuiTextured, BACKGROUND_TEXTURE, 0, 1, 160, 32);
+
+        context.drawTexture(RenderLayer::getGuiTextured, iconTexture, 4,5,0,0, 21,21, 21, 21);
         // 4 + 21 + 2 = x of icon texture + width of icon texture + buffer space
         context.drawText(MinecraftClient.getInstance().textRenderer, getTitle(), 4+21+2,7, WHITE_COLOUR, false);
 
         context.drawText(MinecraftClient.getInstance().textRenderer, getSub(), 4+21+2, 7+MinecraftClient.getInstance().textRenderer.fontHeight, GRAY_COLOUR, false);
+    }
 
-        return startTime > DISPLAY_TIME ? Visibility.HIDE : Visibility.SHOW;
+    @Override
+    public Visibility getVisibility() {
+        return visibility;
     }
 
     protected Text getSub() {
