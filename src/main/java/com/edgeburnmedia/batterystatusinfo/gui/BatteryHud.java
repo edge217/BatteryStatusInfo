@@ -3,21 +3,23 @@ package com.edgeburnmedia.batterystatusinfo.gui;
 import com.edgeburnmedia.batterystatusinfo.BatteryStatus;
 import com.edgeburnmedia.batterystatusinfo.config.BatteryStatusInfoConfig;
 import com.edgeburnmedia.batterystatusinfo.utils.BatteryUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.CommonColors;
 
 public class BatteryHud {
-	private static final MinecraftClient client = MinecraftClient.getInstance();
+	private static final Minecraft client = Minecraft.getInstance();
 	private static final int SCALE = 21;
-	private static final int PERCENT_COLOUR = 0xFFFFFF;
+	private static final int PERCENT_COLOUR = CommonColors.WHITE;
 	private final BatteryStatusInfoConfig config;
 
 	public BatteryHud(BatteryStatusInfoConfig config) {
 		this.config = config;
 	}
 
-	public void render(BatteryStatus status, DrawContext drawContext) {
+	public void render(BatteryStatus status, GuiGraphicsExtractor drawContext) {
 		if (!config.isShowHud()) {
 			return;
 		}
@@ -26,8 +28,8 @@ public class BatteryHud {
 			return;
 		}
 
-		final int windowWidth = client.getWindow().getScaledWidth();
-		final int windowHeight = client.getWindow().getScaledHeight();
+		final int windowWidth = client.getWindow().getGuiScaledWidth();
+		final int windowHeight = client.getWindow().getGuiScaledHeight();
 
 		String text = BatteryUtils.getChargePercent(status.getCharge()) + "%";
 
@@ -35,25 +37,25 @@ public class BatteryHud {
 
 		final Identifier texture = status.getBatteryIcon();
 
-		int textWidth = client.textRenderer.getWidth(text);
-		int textHeight = client.textRenderer.fontHeight;
+		int textWidth = client.font.width(text);
+		int textHeight = client.font.lineHeight;
 
         switch (position) {
 			case TOP_LEFT -> {
-				drawContext.drawTexture(texture, 1, 0, 0, 0, SCALE, SCALE, SCALE, SCALE);
-				drawContext.drawTextWithShadow(client.textRenderer, text, 23, 7, PERCENT_COLOUR);
+				drawContext.blit(RenderPipelines.GUI_TEXTURED, texture, 1, 0, 0, 0, SCALE, SCALE, SCALE, SCALE);
+				drawContext.text(client.font, text, 23, 7, PERCENT_COLOUR);
 			}
 			case TOP_RIGHT -> {
-				drawContext.drawTexture(texture, windowWidth - SCALE - 1, 0, 0, 0, SCALE, SCALE, SCALE, SCALE);
-				drawContext.drawTextWithShadow(client.textRenderer, text, windowWidth - textWidth - 23, 7, PERCENT_COLOUR);
+				drawContext.blit(RenderPipelines.GUI_TEXTURED, texture, windowWidth - SCALE - 1, 0, 0, 0, SCALE, SCALE, SCALE, SCALE);
+				drawContext.text(client.font, text, windowWidth - textWidth - 23, 7, PERCENT_COLOUR);
 			}
 			case BOTTOM_LEFT -> {
-				drawContext.drawTexture(texture, 1, windowHeight - SCALE - 1, 0, 0, SCALE, SCALE, SCALE, SCALE);
-				drawContext.drawTextWithShadow(client.textRenderer, text, 23, windowHeight - textHeight - 6, PERCENT_COLOUR);
+				drawContext.blit(RenderPipelines.GUI_TEXTURED, texture, 1, windowHeight - SCALE - 1, 0, 0, SCALE, SCALE, SCALE, SCALE);
+				drawContext.text(client.font, text, 23, windowHeight - textHeight - 6, PERCENT_COLOUR);
 			}
 			case BOTTOM_RIGHT -> {
-				drawContext.drawTexture(texture, windowWidth - SCALE - 1, windowHeight - SCALE - 1, 0, 0, SCALE, SCALE, SCALE, SCALE);
-				drawContext.drawTextWithShadow(client.textRenderer, text, windowWidth - textWidth - 23, windowHeight - textHeight - 6, PERCENT_COLOUR);
+				drawContext.blit(RenderPipelines.GUI_TEXTURED, texture, windowWidth - SCALE - 1, windowHeight - SCALE - 1, 0, 0, SCALE, SCALE, SCALE, SCALE);
+				drawContext.text(client.font, text, windowWidth - textWidth - 23, windowHeight - textHeight - 6, PERCENT_COLOUR);
 			}
 		}
 

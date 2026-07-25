@@ -2,7 +2,7 @@ package com.edgeburnmedia.batterystatusinfo.utils;
 
 import com.edgeburnmedia.batterystatusinfo.BatteryStatus;
 import com.edgeburnmedia.batterystatusinfo.client.BatteryStatusInfoModClient;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 import oshi.SystemInfo;
 import oshi.hardware.PowerSource;
 
