@@ -1,7 +1,7 @@
 package com.edgeburnmedia.batterystatusinfo;
 
 import com.edgeburnmedia.batterystatusinfo.utils.BatteryUtils;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 /**
  * Class representing the status of the battery at a given point.
